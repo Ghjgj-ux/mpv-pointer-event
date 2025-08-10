@@ -265,30 +265,3 @@ mp.observe_property('window-maximized', 'bool', function(name, val)
 	maximized = val
 	update_windowed()
 end)
-
-local mp = require 'mp'
-
--- 获取屏幕尺寸
-local function get_screen_size()
-  local w, h = mp.get_osd_size()
-  return w, h
-end
-
--- 注册鼠标事件监听
-mp.observe_property("mouse-pos", "native", function(_, pos)
-  if not pos then return end
-  local x, y = pos.x, pos.y
-  local screen_w, screen_h = get_screen_size()
-
-  -- 注册 left_single 事件
-  mp.add_key_binding(nil, "left_single", function()
-    local left_bound = screen_w * 0.25
-    local right_bound = screen_w * 0.75
-    local bottom_exclude = screen_h - 130
-
-    if x >= left_bound and x <= right_bound and y <= bottom_exclude then
-      mp.command("cycle pause")
-    end
-  end)
-end)
-
